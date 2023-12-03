@@ -32,7 +32,7 @@ console.log(`Part one: ${sum}`);
 let sum2 = 0;
 
 [...dataset.split("\n")].forEach((line) => {
-  const [gameID, runs] = line.split(":");
+  const [_, runs] = line.split(":");
   const maxi = {
     red: 0,
     green: 0,
