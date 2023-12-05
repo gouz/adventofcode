@@ -1,3 +1,5 @@
+const time = performance.now();
+
 const dataset = await Bun.file("02.txt").text();
 
 const max = {
@@ -35,3 +37,5 @@ let sum2 = 0;
 
 console.log(`Part one: ${sum}`);
 console.log(`Part two: ${sum2}`);
+
+console.log(`${performance.now() - time} ms`);

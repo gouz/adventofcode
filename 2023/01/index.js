@@ -1,3 +1,5 @@
+const time = performance.now();
+
 const dataset = await Bun.file("01.txt").text();
 
 const makeNum = (a, b) => 10 * Number(a) + Number(b);
@@ -32,3 +34,5 @@ Object.entries({
 });
 
 console.log(`Part Two: ${calc(parttwo.replace(/[a-zA-Z]+/g, ""))}`);
+
+console.log(`${performance.now() - time} ms`);
