@@ -20,7 +20,7 @@ const seeds = [];
         bmap.push(line.split(" ").map((i) => Number(i)));
       }
     });
-    maps.push(bmap);
+    maps.push(bmap.sort((a, b) => a[1] > b[2]));
   }
 });
 
@@ -31,6 +31,7 @@ const calc = (src) => {
     map.forEach(([a, b, c]) => {
       if (s >= b && s < b + c) {
         dest = s - b + a;
+        return;
       }
     });
   });
@@ -38,5 +39,16 @@ const calc = (src) => {
 };
 
 console.log(`Part one: ${Math.min(...seeds.map((s) => calc(s)))}`); // test => 35
+
+let min = Infinity;
+let cpt = 0;
+for (let j = 0; j < seeds.length; j += 2) {
+  for (let i = seeds[j]; i < seeds[j] + seeds[j + 1]; i++) {
+    let res = calc(i);
+    console.log(i, res, ++cpt);
+    if (res < min) min = res;
+  }
+}
+console.log(`Part two: ${min}`); // test => 46
 
 console.log(`${performance.now() - time} ms`);
