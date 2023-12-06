@@ -41,11 +41,9 @@ const calc = (src) => {
 console.log(`Part one: ${Math.min(...seeds.map((s) => calc(s)))}`); // test => 35
 
 let min = Infinity;
-let cpt = 0;
 for (let j = 0; j < seeds.length; j += 2) {
   for (let i = seeds[j]; i < seeds[j] + seeds[j + 1]; i++) {
     let res = calc(i);
-    console.log(i, res, ++cpt);
     if (res < min) min = res;
   }
 }
