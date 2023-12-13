@@ -4,16 +4,17 @@ const test1 = `.....
 .L-J.
 .....`;
 
-const test2 = `..F7.
-.FJ|.
-SJ.L7
+const test2 = `7-F7-
+.FJ|7
+SJLL7
 |F--J
-LJ...`;
+LJ.LJ`;
 
 const dataset = await Bun.file("input.txt").text();
 
 const move = (map, { dir, x, y }) => {
-  switch (map[y][x]) {
+  const char = map[y][x];
+  switch (char) {
     case "|":
       if (dir === "N") return { x, y: y + 1, dir };
       return { x, y: y - 1, dir };
@@ -28,7 +29,7 @@ const move = (map, { dir, x, y }) => {
       return { x: x - 1, y, dir: "E" };
     case "7":
       if (dir === "W") return { x, y: y + 1, dir: "N" };
-      return { x: x - 1, y, dir: "W" };
+      return { x: x - 1, y, dir: "E" };
     case "F":
       if (dir === "S") return { x: x + 1, y, dir: "W" };
       return { x, y: y + 1, dir: "N" };
@@ -60,9 +61,11 @@ const calcPathLength = (text) => {
   const map = transformToMap(text);
   const startPos = findS(map);
   let pos = findNext(map, startPos);
+  //console.log({ startPos, pos });
   let walk = 1;
   do {
     pos = move(map, pos);
+    //console.log(pos);
     walk++;
   } while (!(pos.x === startPos.x && pos.y === startPos.y));
   return walk;
