@@ -4,7 +4,7 @@ const lights = [];
 
 for (let x = 0; x < 1000; x++) {
   lights[x] = [];
-  for (let y = 0; y < 1000; y++) lights[x][y] = false;
+  for (let y = 0; y < 1000; y++) lights[x][y] = 0;
 }
 
 const regex = /(\w+) (\d+),(\d+) through (\d+),(\d+)/g;
@@ -24,15 +24,17 @@ const regex = /(\w+) (\d+),(\d+) through (\d+),(\d+)/g;
 
     for (let x = x1; x <= x2; x++)
       for (let y = y1; y <= y2; y++) {
-        if (action === "off") lights[x][y] = false;
-        else if (action === "on") lights[x][y] = true;
-        else lights[x][y] = !lights[x][y];
+        if (action === "off") {
+          lights[x][y] -= 1;
+          if (lights[x][y] < 0) lights[x][y] = 0;
+        } else if (action === "on") lights[x][y] += 1;
+        else lights[x][y] += 2;
       }
   }
 });
 
 let count = 0;
 for (let x = 0; x < 1000; x++)
-  for (let y = 0; y < 1000; y++) if (lights[x][y]) count++;
+  for (let y = 0; y < 1000; y++) count += lights[x][y];
 
-console.log(`Part One: ${count}`);
+console.log(`Part Two: ${count}`);
