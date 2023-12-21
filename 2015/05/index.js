@@ -37,12 +37,54 @@ const isNaughty = (line) => {
   return naughty;
 };
 
-tests.forEach((line) => {
-  console.log(line.input, isNaughty(line.input) === line.result);
-});
+// tests.forEach((line) => {
+//   console.log(line.input, isNaughty(line.input) === line.result);
+// });
 
 console.log(
   `Part One: ${
     [...dataset.split("\n")].filter((line) => !isNaughty(line)).length
   }`
+);
+
+const part2tests = [
+  {
+    str: "qjhvhtzxzqqjkmpb",
+    res: true,
+  },
+  {
+    str: "xxyxx",
+    res: true,
+  },
+  {
+    str: "uurcxstgmygtbstg",
+    res: false,
+  },
+  {
+    str: "ieodomkazucvgmuy",
+    res: false,
+  },
+];
+
+const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
+
+const part2 = (str) => {
+  const hasTwice = /([a-zA-Z]{2,}).*?\1/.test(str);
+  if (hasTwice) {
+    let found = false;
+    alphabet.forEach((char) => {
+      const haveMiddle = new RegExp(`${char}(\\w{1})${char}`, "g").test(str);
+      if (haveMiddle) found = true;
+    });
+    return found;
+  }
+  return false;
+};
+
+// part2tests.forEach((test) =>
+//   console.log(test.str, part2(test.str) === test.res)
+// );
+
+console.log(
+  `Part Two: ${[...dataset.split("\n")].filter((line) => part2(line)).length}`
 );
