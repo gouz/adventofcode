@@ -38,10 +38,7 @@ const cleanReport = (report: number[]) => {
 			1,
 		);
 	if (nbNul === 0 && nbNeg === 1)
-		return report.toSpliced(
-			deltas.map((n) => (n > 0 ? 1 : -1)).indexOf(-1) + 1,
-			1,
-		);
+		return report.toSpliced(deltas.map((n) => (n > 0 ? 1 : -1)).indexOf(-1), 1);
 	return report;
 };
 
