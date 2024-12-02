@@ -33,9 +33,15 @@ const cleanReport = (report: number[]) => {
 	const nbNul = deltas.filter((n) => n === 0).length;
 	if (nbNul === 1) return report.toSpliced(deltas.indexOf(0) + 1, 1);
 	if (nbNul === 0 && nbPos === 1)
-		return report.toSpliced(deltas.indexOf(1) + 1, 1);
+		return report.toSpliced(
+			deltas.map((n) => (n > 0 ? 1 : -1)).indexOf(1) + 1,
+			1,
+		);
 	if (nbNul === 0 && nbNeg === 1)
-		return report.toSpliced(deltas.indexOf(-1) + 1, 1);
+		return report.toSpliced(
+			deltas.map((n) => (n > 0 ? 1 : -1)).indexOf(-1) + 1,
+			1,
+		);
 	return report;
 };
 
