@@ -23,28 +23,11 @@ parsed.forEach((report, i) => {
 });
 console.log(part1);
 
-const cleanReport = (report: number[]) => {
-	const deltas: number[] = [];
-	for (let i = 1; i < report.length; i++) {
-		deltas.push(report[i] - report[i - 1]);
-	}
-	const nbNeg = deltas.filter((n) => n < 0).length;
-	const nbPos = deltas.filter((n) => n > 0).length;
-	const nbNul = deltas.filter((n) => n === 0).length;
-	if (nbNul === 1) return report.toSpliced(deltas.indexOf(0) + 1, 1);
-	if (nbNul === 0 && nbPos === 1)
-		return report.toSpliced(
-			deltas.map((n) => (n > 0 ? 1 : -1)).indexOf(1) + 1,
-			1,
-		);
-	if (nbNul === 0 && nbNeg === 1)
-		return report.toSpliced(deltas.map((n) => (n > 0 ? 1 : -1)).indexOf(-1), 1);
-	return report;
-};
-
 let part2 = 0;
 parsed.forEach((report, _) => {
-	const newReport = cleanReport(report);
-	part2 += isSafe(newReport) ? 1 : 0;
+	part2 +=
+		isSafe(report) || report.map((_, i) => report.toSpliced(i, 1)).some(isSafe)
+			? 1
+			: 0;
 });
 console.log(part2);
