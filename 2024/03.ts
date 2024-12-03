@@ -13,10 +13,7 @@ console.log(part1);
 
 const part2 = [...formula.split("do()")]
 	.map((f) => f.split("don't()"))
-	.map((g) => {
-		if (g.length === 1) return g;
-		return g.toSpliced(1);
-	})
+	.map((g) => g.toSpliced(1))
 	.flatMap((f) => f.flatMap(calc))
 	.reduce((a, b) => a + b, 0);
 
