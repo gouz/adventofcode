@@ -1,4 +1,6 @@
-const list = await Bun.file(`${process.cwd()}/2024/01/input.txt`).text();
+import { loadInputFile } from "../../utils";
+
+const list = await loadInputFile("2024/01");
 
 const parsed = list.split("\n").map((line) => {
 	const splitted = line.split(" ");
@@ -14,7 +16,7 @@ left.forEach((l, i) => {
 	part1 += Math.abs(l - right[i]);
 });
 
-console.log(part1);
+console.log({ part1 });
 
 let part2 = 0;
 
@@ -22,4 +24,4 @@ left.forEach((l, _) => {
 	part2 += l * right.filter((r) => r === l).length;
 });
 
-console.log(part2);
+console.log({ part2 });

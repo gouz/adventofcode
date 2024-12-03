@@ -1,4 +1,6 @@
-const formula = await Bun.file(`${process.cwd()}/2024/03/input.txt`).text();
+import { loadInputFile } from "../../utils";
+
+const formula = await loadInputFile("2024/03");
 
 const calc = (formula: string) =>
 	[...formula.matchAll(/(mul\(\d+,\d+\))/g)]
@@ -9,7 +11,7 @@ const calc = (formula: string) =>
 
 const part1 = calc(formula);
 
-console.log(part1);
+console.log({ part1 });
 
 const part2 = [...formula.split("do()")]
 	.map((f) => f.split("don't()"))
@@ -17,4 +19,4 @@ const part2 = [...formula.split("do()")]
 	.flatMap((f) => f.flatMap(calc))
 	.reduce((a, b) => a + b, 0);
 
-console.log(part2);
+console.log({ part2 });

@@ -1,4 +1,6 @@
-const list = await Bun.file(`${process.cwd()}/2024/02/input.txt`).text();
+import { loadInputFile } from "../../utils";
+
+const list = await loadInputFile("2024/02");
 
 const parsed = list.split("\n").map((line) => line.split(" ").map(Number));
 
@@ -21,7 +23,7 @@ let part1 = 0;
 parsed.forEach((report, i) => {
 	part1 += isSafe(report) ? 1 : 0;
 });
-console.log(part1);
+console.log({ part1 });
 
 let part2 = 0;
 parsed.forEach((report, _) => {
@@ -30,4 +32,4 @@ parsed.forEach((report, _) => {
 			? 1
 			: 0;
 });
-console.log(part2);
+console.log({ part2 });
