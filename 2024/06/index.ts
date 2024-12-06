@@ -88,8 +88,6 @@ console.log(nbPos);
 
 let nbLoop = 0;
 
-const s = performance.now();
-
 for (let y = 0; y < maxRow; y++) {
 	for (let x = 0; x < maxCol; x++) {
 		map = JSON.parse(JSON.stringify(originalMap));
@@ -113,5 +111,5 @@ for (let y = 0; y < maxRow; y++) {
 		}
 	}
 }
-console.log((performance.now() - s) / 1000);
+
 console.log(nbLoop);
