@@ -1,61 +1,38 @@
 import { loadInputFile } from "../../utils";
 
-const dataset = await loadInputFile("2015/09", "sample");
+const dataset = await loadInputFile("2015/09", "input");
 
-type Trip = { from: string; to: string; distance: number };
+const cities: { [key: string]: { [key: string]: number } } = {};
 
-const trips = dataset
+dataset
 	.split("\n")
 	.map((line) => line.split(" = "))
-	.flatMap(([route, distance]) => {
+	.forEach(([route, distance], _) => {
 		const [from, to] = route.split(" to ");
-		return [
-			{
-				from,
-				to,
-				distance: Number(distance),
-			},
-			{
-				from: to,
-				to: from,
-				distance: Number(distance),
-			},
-		];
-	}) as Trip[];
-
-const getPossibilities = (city: string) =>
-	trips.filter((trip) => trip.from === city);
-
-const getDistance = (from: string, to: string) =>
-	trips.filter((t) => t.from === from && t.to === to)[0].distance;
-
-const cities: string[] = [...new Set([...trips.map(({ from }) => from)])];
-
-const travels: string[][] = [];
-
-for (let i = 0; i < cities.length; ++i) {
-	const dest1 = [
-		...new Set(getPossibilities(cities[i]).map((trip) => trip.to)),
-	];
-	for (let j = 0; j < dest1.length; ++j) {
-		[...new Set(getPossibilities(dest1[j]).map((trip) => trip.to))]
-			.filter((c) => c !== cities[i])
-			.forEach((dest2, _) => travels.push([cities[i], dest1[j], dest2]));
-	}
-}
-
-const travelsWithDistance: { travel: string[]; distance: number }[] = [];
-
-travels.forEach((t, _) => {
-	const distance = getDistance(t[0], t[1]) + getDistance(t[1], t[2]);
-	travelsWithDistance.push({
-		travel: t,
-		distance,
+		if (!cities[from]) cities[from] = {};
+		if (!cities[to]) cities[to] = {};
+		cities[from][to] = Number(distance);
+		cities[to][from] = Number(distance);
 	});
-});
 
-console.log(travelsWithDistance);
+const permutations = (array: string[]): string[][] => {
+	if (array.length === 1) return [array];
+	return array
+		.map((_, index, array) =>
+			permutations(array.filter((city, i) => city !== array[index])).map(
+				(permutation) => [array[index], ...permutation],
+			),
+		)
+		.reduce((a, b) => a.concat(b), []);
+};
 
-console.log(
-	travelsWithDistance.toSorted((a, b) => a.distance - b.distance)[0].distance,
-);
+const getDistance = (route: string[]): number => {
+	return route
+		.map((city1, index, array) =>
+			array[index + 1] ? cities[city1][array[index + 1]] : 0,
+		)
+		.reduce((distance, distanceToNextCity) => distance + distanceToNextCity, 0);
+};
+
+console.log(Math.min(...permutations(Object.keys(cities)).map(getDistance)));
+console.log(Math.max(...permutations(Object.keys(cities)).map(getDistance)));
