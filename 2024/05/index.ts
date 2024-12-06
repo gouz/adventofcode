@@ -1,50 +1,37 @@
 import { loadInputFile } from "../../utils";
 
-const dataset = await loadInputFile("2024/05", "sample");
+const dataset = await loadInputFile("2024/05", "input");
 
-const hasAfter: { [key: string]: string[] } = {};
-const hasBefore: { [key: string]: string[] } = {};
+const isBefore: { [key: string]: string[] } = {};
+const isAfter: { [key: string]: string[] } = {};
 const sets: string[][] = [];
 
 dataset.split("\n").forEach((line, _) => {
 	if (line.includes("|")) {
 		const [from, to] = line.split("|");
-		if (!hasAfter[from]) hasAfter[from] = [];
-		hasAfter[from].push(to);
-		if (!hasBefore[to]) hasBefore[to] = [];
-		hasBefore[to].push(from);
+		if (!isBefore[from]) isBefore[from] = [];
+		isBefore[from].push(to);
+		if (!isAfter[to]) isAfter[to] = [];
+		isAfter[to].push(from);
 	} else if (line.includes(",")) {
 		sets.push(line.split(","));
 	}
 });
 
-const isCorrecAfter = (set: string[]) => {
-	const lSet = [...set];
-	for (let i = 0; i < set.length - 1; i++) {
-		const l = lSet.shift() || "";
-		if (!lSet.filter((value) => hasAfter[l]?.includes(value)).length)
-			return false;
+const isCorrect = (set: string[]) => {
+	for (let i = 1; i <= set.length; i++) {
+		const cur = set[i - 1];
+		const before = set.toSpliced(i - 1);
+		if (!before?.every((value) => isAfter[cur]?.includes(value))) return false;
 	}
 	return true;
 };
-
-const isCorrectBefore = (set: string[]) => {
-	const rSet = [...set];
-	for (let i = 0; i < set.length - 1; i++) {
-		const r = rSet.pop() || "";
-		if (!rSet.filter((value) => hasBefore[r]?.includes(value)).length)
-			return false;
-	}
-	return true;
-};
-
-const isCorrect = (set: string[]) => isCorrecAfter(set) && isCorrectBefore(set);
 
 const getMiddle = (set: string[]) => set[Math.floor(set.length / 2)];
 
 console.log(
 	sets
-		.filter(isCorrect)
+		.filter((s) => isCorrect(s))
 		.map(getMiddle)
 		.reduce((a, b) => a + Number(b), 0),
 );
