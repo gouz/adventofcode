@@ -36,13 +36,12 @@ console.log(
 		.reduce((a, b) => a + Number(b), 0),
 );
 
-const fixUpdate = (set: string[]) => {
-	return set.toSorted((a, b) => {
+const fixUpdate = (set: string[]) => set.toSorted((a, b) => {
 		if (isBefore[a]?.includes(b)) return -1;
 		if (isAfter[b]?.includes(a)) return 1;
 		return 0;
 	});
-};
+
 console.log(
 	sets
 		.filter((s) => !isCorrect(s))
