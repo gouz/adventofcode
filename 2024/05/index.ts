@@ -1,6 +1,6 @@
 import { loadInputFile } from "../../utils";
 
-const dataset = await loadInputFile("2024/05", "input");
+const dataset = await loadInputFile("2024/05", "sample");
 
 const hasAfter: { [key: string]: string[] } = {};
 const hasBefore: { [key: string]: string[] } = {};
