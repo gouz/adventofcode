@@ -70,17 +70,14 @@ const move = () => {
 		out = true;
 	}
 };
-const displayMap = () => console.log(map.map((l) => l.join()).join("\n"));
 
 let char = "^";
 findStart();
 
 let out = false;
-const s = performance.now();
 while (!out) {
 	move();
 }
-console.log(performance.now() - s);
 
 const nbPos = map.reduce(
 	(acc, row) => acc + row.filter((c) => c === "X").length,
