@@ -1,8 +1,9 @@
 import { loadInputFile } from "../../utils";
 
-const map = (await loadInputFile("2024/06", "input"))
+let map = (await loadInputFile("2024/06", "input"))
 	.split("\n")
 	.map((line) => line.split(""));
+const originalMap = JSON.parse(JSON.stringify(map));
 
 // search start pos
 let row = -1;
@@ -11,18 +12,17 @@ let col = -1;
 const maxRow = map.length;
 const maxCol = map[0].length;
 
-for (let y = 0; y < maxRow; y++) {
-	for (let x = 0; x < maxCol; x++) {
-		if (map[y][x] === "^") {
-			row = y;
-			col = x;
-			break;
+const findStart = () => {
+	for (let y = 0; y < maxRow; y++) {
+		for (let x = 0; x < maxCol; x++) {
+			if (map[y][x] === "^") {
+				row = y;
+				col = x;
+				return;
+			}
 		}
 	}
-}
-
-let char = "^";
-
+};
 const next = () => {
 	switch (char) {
 		case "^":
@@ -36,14 +36,11 @@ const next = () => {
 	}
 	return [-1, -1];
 };
-
-let out = false;
-
 const move = () => {
 	const [y, x] = next();
 	map[row][col] = "X";
 	if (0 <= y && y < maxRow && 0 <= x && x < maxCol) {
-		if (map[y][x] === "#") {
+		if (map[y][x] === "#" || map[y][x] === "O") {
 			switch (char) {
 				case "^":
 					row = y + 1;
@@ -73,11 +70,49 @@ const move = () => {
 		out = true;
 	}
 };
+const displayMap = () => console.log(map.map((l) => l.join()).join("\n"));
 
+let char = "^";
+findStart();
+
+let out = false;
+const s = performance.now();
 while (!out) {
 	move();
 }
+console.log(performance.now() - s);
 
-console.log(
-	map.reduce((acc, row) => acc + row.filter((c) => c === "X").length, 0),
+const nbPos = map.reduce(
+	(acc, row) => acc + row.filter((c) => c === "X").length,
+	0,
 );
+
+console.log(nbPos);
+
+let nbLoop = 0;
+
+for (let y = 0; y < maxRow; y++) {
+	for (let x = 0; x < maxCol; x++) {
+		map = JSON.parse(JSON.stringify(originalMap));
+		map[y][x] = "X";
+		if (map[y][x] !== "#") {
+			map[y][x] = "O";
+			char = "^";
+			findStart();
+			out = false;
+			let timeout = false;
+			const startTime = performance.now();
+			while (!out && !timeout) {
+				move();
+				if (performance.now() - startTime > 15) {
+					timeout = true;
+				}
+			}
+			if (timeout) {
+				nbLoop++;
+			}
+		}
+	}
+}
+
+console.log(nbLoop);
