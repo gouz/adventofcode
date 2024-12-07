@@ -19,7 +19,7 @@ const permutations = (array: string[]): string[][] => {
 	if (array.length === 1) return [array];
 	return array
 		.map((_, index, array) =>
-			permutations(array.filter((city, i) => city !== array[index])).map(
+			permutations(array.filter((city) => city !== array[index])).map(
 				(permutation) => [array[index], ...permutation],
 			),
 		)
