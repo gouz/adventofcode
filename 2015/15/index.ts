@@ -8,17 +8,9 @@ const caracteristics = [
 	"calories",
 ];
 
-type Ingredient = {
-	capacity: number;
-	durability: number;
-	flavor: number;
-	texture: number;
-	calories: number;
-};
+type Ingredient = { [key: string]: string };
 
-const ingredients: {
-	[key: string]: Ingredient;
-} = {};
+const ingredients: Ingredient[] = [];
 
 (await loadInputFile("2015/15", "sample"))
 	.split("\n")
@@ -32,14 +24,29 @@ const ingredients: {
 	)
 	.forEach(
 		([name, , capacity, , durability, , flavor, , texture, , calories], _) => {
-			ingredients[name] = {
-				capacity: Number(capacity),
-				durability: Number(durability),
-				flavor: Number(flavor),
-				texture: Number(texture),
-				calories: Number(calories),
-			};
+			ingredients.push({
+				name: name,
+				capacity: capacity,
+				durability: durability,
+				flavor: flavor,
+				texture: texture,
+				calories: calories,
+			});
 		},
 	);
 
 console.log("Ingredients:", ingredients);
+
+const sums: number[] = [];
+
+for (let i = 0; i < 100; i++) {
+	let sum = 0;
+	caracteristics.forEach((car, _) => {
+		ingredients.forEach((ingredient, j) => {
+			sum += Number(ingredient[car]) * i;
+		});
+	});
+	sums.push(sum);
+}
+
+console.log(sums);
