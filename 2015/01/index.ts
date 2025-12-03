@@ -1,13 +1,14 @@
-import { loadInputFile } from "../../utils";
+export const calc = (input: string) => {
+  const dataset = input.split("");
 
-const dataset = (await loadInputFile("2015/01")).split("");
+  let floor = 0;
+  let part2 = 0;
+  while (floor !== -1) floor += dataset[part2++] === "(" ? 1 : -1;
 
-console.log(
-	`Part one: ${dataset.filter((d) => d === "(").length - dataset.filter((d) => d === ")").length}`,
-);
-
-let floor = 0;
-let i = 0;
-while (floor !== -1) floor += dataset[i++] === "(" ? 1 : -1;
-
-console.log(`Part two: ${i}`);
+  return {
+    part1:
+      dataset.filter((d) => d === "(").length -
+      dataset.filter((d) => d === ")").length,
+    part2,
+  };
+};

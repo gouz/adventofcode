@@ -27,3 +27,7 @@ For example:
 *   The next password after `ghijklmn` is `ghjaabcc`, because you eventually skip all the passwords that start with `ghi...`, since `i` is not allowed.
 
 Given Santa's current password (your puzzle input), what should his _next password_ be?
+
+### Part Two
+
+Santa's password <span title="The corporate policy says your password expires after 12 seconds.  For security.">expired again</span>. What's the next one?

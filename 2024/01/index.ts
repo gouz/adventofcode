@@ -1,27 +1,19 @@
-import { loadInputFile } from "../../utils";
+export const calc = (input: string): { part1: number; part2: number } => {
+  const parsed = input.split("\n").map((line) => {
+    const splitted = line.split(" ");
+    return { left: Number(splitted.shift()), right: Number(splitted.pop()) };
+  });
 
-const list = await loadInputFile("2024/01");
+  const left = parsed.map((l) => l.left).toSorted();
+  const right = parsed.map((l) => l.right).toSorted();
 
-const parsed = list.split("\n").map((line) => {
-	const splitted = line.split(" ");
-	return { left: Number(splitted.shift()), right: Number(splitted.pop()) };
-});
+  let part1 = 0;
+  let part2 = 0;
 
-const left = parsed.map((l) => l.left).toSorted();
-const right = parsed.map((l) => l.right).toSorted();
+  left.forEach((l, i) => {
+    part1 += Math.abs(l - right[i]);
+    part2 += l * right.filter((r) => r === l).length;
+  });
 
-let part1 = 0;
-
-left.forEach((l, i) => {
-	part1 += Math.abs(l - right[i]);
-});
-
-console.log({ part1 });
-
-let part2 = 0;
-
-left.forEach((l, _) => {
-	part2 += l * right.filter((r) => r === l).length;
-});
-
-console.log({ part2 });
+  return { part1, part2 };
+};
