@@ -6,6 +6,28 @@ type Ingredient = {
   calories: number;
 };
 
+const getCombinations = (maximum: number, nb: number): number[][] => {
+  const res: number[][] = [];
+
+  const genCombinations = (
+    rest: number,
+    position: number,
+    current: number[],
+  ) => {
+    if (position === nb - 1) {
+      res.push([...current, rest]);
+      return;
+    }
+
+    for (let i = 1; i <= rest; i++) {
+      genCombinations(rest - i, position + 1, [...current, i]);
+    }
+  };
+
+  genCombinations(maximum, 0, []);
+  return res;
+};
+
 export const calc = (input: string) => {
   const ingredients: Ingredient[] = [];
 
@@ -32,22 +54,33 @@ export const calc = (input: string) => {
       },
     );
 
-  const nbSpoonMaxPerIngredient = 100 / ingredients.length;
+  const calcScore = (spoons: number[]) =>
+    Object.keys(ingredients[0])
+      .filter((k) => k !== "calories")
+      .map((k) =>
+        ingredients
+          .map((i, n) => i[k as keyof Ingredient] * spoons[n])
+          .reduce((acc, i) => acc + i, 0),
+      )
+      .reduce((acc, i) => {
+        return acc * Math.max(0, i);
+      }, 1);
 
-  const calcScore = (spoon: number) => {
-    const capacity = ingredients
-      .map((i) => i.capacity)
-      .reduce((i, acc) => acc + i * spoon, 0);
-    return 0;
-  };
+  const calcCalories = (spoons: number[]) =>
+    ingredients
+      .map((i, j) => i.calories * spoons[j])
+      .reduce((acc, i) => acc + i, 0);
 
-  let maxScore = 0;
-  for (let i = 0; i <= nbSpoonMaxPerIngredient; i++) {
-    const score = calcScore(i);
-    if (maxScore < score) maxScore = score;
-  }
-
+  let part1 = 0;
+  let part2 = 0;
+  getCombinations(100, ingredients.length).forEach((s, _) => {
+    const score = calcScore(s);
+    const totalCalories = calcCalories(s);
+    if (part1 < score) part1 = score;
+    if (totalCalories === 500 && part2 < score) part2 = score;
+  });
   return {
-    part1: maxScore,
+    part1,
+    part2,
   };
 };
