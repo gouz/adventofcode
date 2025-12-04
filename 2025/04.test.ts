@@ -8,5 +8,5 @@ test("04", async () => {
   expect(sample.part2).toBe(43);
   const input = calc(await loadInputFile("2025/04", "input"));
   expect(input.part1).toBe(1363);
-  console.log(input);
+  expect(input.part2).toBe(8184);
 });
