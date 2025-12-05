@@ -7,5 +7,6 @@ test("01", async () => {
   expect(sample.part1).toBe(3);
   expect(sample.part2).toBe(6);
   const input = calc(await loadInputFile("2025/01", "input"));
-  console.log(input);
+  expect(input.part1).toBe(1066);
+  expect(input.part2).toBe(6223);
 });
